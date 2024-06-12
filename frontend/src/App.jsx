@@ -1,9 +1,10 @@
 import './App.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import cardService from './services/cards'
 
 import Collection from './components/collection'
+import Lobby from './components/lobby'
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         </ul>
       </nav>
       <Collection cards={cards} />
+      <Lobby />
     </main>
   )
 }
