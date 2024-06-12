@@ -1,0 +1,61 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.collection {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  max-width: 200px;
+  max-height: 400px;
+  padding: 10px;
+  margin: 5px;
+  z-index: -1;
+  border-radius: 5px;
+  border: 1px solid gold;
+  background-color: black;
+  position: relative;
+
+  .player-image {
+    max-width: inherit;
+    object-fit: contain;
+    object-position: 50% 0%;
+    position: relative;
+    margin-bottom: -120px;
+    z-index: -1;
+  }
+
+  .flag {
+    object-fit: cover;
+    position: absolute;
+    z-index: -2;
+  }
+
+  .card-content {
+    padding-top: 30px;
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 0%, rgb(0, 0, 0) 10%);
+  }
+
+  h1 {
+    margin: 10px;
+  }
+
+  h2 {
+    border-top: solid 1px gold;
+    padding: 5px;
+    margin: 0;
+  }
+  
+  h4 {
+    margin: 0;
+  }
+}
+
+.read-the-docs {
+  color: #888;
+}

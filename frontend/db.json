@@ -1,0 +1,34 @@
+{
+    "cards": [
+        {
+            "id": 1,
+            "name": "Blair Kinghorn",
+            "position": "Fullback",
+            "rating": 89,
+            "nationality": "Scotland",
+            "flag": "https://www.rugbyworldcup.com/rwc2023-resources/prod/rwc2023_v6.8.0/i/elements/team-badges/SCO.png",
+            "imgUrl": "https://www.rugbyworldcup.com/rwc2023/person-images-site/player-profile/55642.png",
+            "quality": "standard"
+        },
+        {
+            "id": 2,
+            "name": "Emiliano Boffelli",
+            "position": "Fullback",
+            "rating": 85,
+            "nationality": "Argentina",
+            "flag": "https://www.rugbyworldcup.com/rwc2023-resources/prod/rwc2023_v6.8.0/i/elements/team-badges/ARG.png",
+            "imgUrl": "https://www.rugbyworldcup.com/rwc2023/person-images-site/player-profile/48640.png",
+            "quality": "standard"
+        },
+        {
+            "id": 3,
+            "name": "Ange Capuozzo",
+            "position": "Fullback",
+            "rating": 76,
+            "nationality": "Italy",
+            "flag": "https://www.rugbyworldcup.com/rwc2023-resources/prod/rwc2023_v6.8.0/i/elements/team-badges/ITA.png",
+            "imgUrl": "https://www.rugbyworldcup.com/rwc2023/person-images-site/player-profile/67092.png",
+            "quality": "standard"
+        }        
+    ]
+}
