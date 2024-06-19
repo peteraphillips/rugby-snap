@@ -2,6 +2,7 @@ import './App.css'
 import { useState } from 'react'
 
 import cardService from './services/cards'
+import playerService from './services/players'
 
 import Collection from './components/collection'
 import Lobby from './components/lobby'
@@ -10,6 +11,7 @@ import Lobby from './components/lobby'
 function App() {
 
   const [cards, setCards] = useState([])
+  const [players, setPlayers] = useState([])
 
   const handleClickCollection = (event) => {
     event.preventDefault()
@@ -25,6 +27,12 @@ function App() {
   const handleClickPlay = (event) => {
     event.preventDefault()
 
+    playerService
+    .getAll()
+    .then(initialPlayers => {
+      setPlayers(initialPlayers)
+    })
+
     setCards([])
   }
 
@@ -38,7 +46,7 @@ function App() {
         </ul>
       </nav>
       <Collection cards={cards} />
-      <Lobby />
+      <Lobby players={players} />
     </main>
   )
 }
