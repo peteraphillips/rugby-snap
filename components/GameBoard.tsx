@@ -1,80 +1,99 @@
-"use client";
+'use client'
 
-import { useReducer, useState } from "react";
-import { createInitialGameState } from "@/game/initGame";
-import { gameReducer } from "@/game/reducer";
-import { calculateLocationPower } from "@/game/scoring";
-import { Card } from "@/game/types";
+import { useReducer, useState } from 'react'
+import { createInitialGameState } from '@/game/initGame'
+import { gameReducer } from '@/game/reducer'
+import { calculateLocationPower } from '@/game/scoring'
+import { Card } from '@/game/types'
+import PlayerCard from './PlayerCard'
 
 export default function GameBoard() {
   const [state, dispatch] = useReducer(
     gameReducer,
     undefined,
-    createInitialGameState,
-  );
+    createInitialGameState
+  )
 
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const activeHand = state.hands[state.activePlayer];
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null)
+  const activeHand = state.hands[state.activePlayer]
 
   return (
-    <div className="max-w-5xl mx-auto mt-6 space-y-6">
+    <div className="relative space-y-6">
+      {/* Optional midline */}
+      <div className="absolute top-1/2 w-full border-t-2 border-white border-dashed pointer-events-none"></div>
+
       {/* Header */}
       <div className="flex justify-between items-center">
-        <div>
+        <div className="text-white">
           <div className="font-bold text-lg">
             Turn {state.turn} — Player {state.activePlayer}
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-200">
             Energy: {state.energy[state.activePlayer]}
           </div>
         </div>
 
         <button
           onClick={() => {
-            setSelectedCard(null);
-            dispatch({ type: "END_TURN" });
+            setSelectedCard(null)
+            dispatch({ type: 'END_TURN' })
           }}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-yellow-400 text-black rounded hover:bg-yellow-500"
         >
           End Turn
         </button>
       </div>
 
       {/* Board */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-4 border-t-2 border-white/50 pt-2">
         {state.board.map((loc, idx) => (
           <div
             key={loc.location.id}
             onClick={() => {
               if (selectedCard) {
                 dispatch({
-                  type: "PLAY_CARD",
+                  type: 'PLAY_CARD',
                   cardId: selectedCard.id,
-                  locationIndex: idx,
-                });
-                setSelectedCard(null);
+                  locationIndex: idx
+                })
+                setSelectedCard(null)
               }
             }}
-            className={`border-2 rounded p-3 min-h-[160px] cursor-pointer
-              ${selectedCard ? "border-blue-500" : "border-gray-700"}`}
+            className={`
+              flex-1 min-h-[160px] border-l-2 border-white/50 last:border-r-2 rounded p-3 cursor-pointer
+              ${selectedCard ? 'border-yellow-400' : 'border-gray-300'}
+              ${
+                loc.location.id === 'scrum'
+                  ? 'bg-gray-200'
+                  : loc.location.id === 'lineout'
+                  ? 'bg-white'
+                  : 'bg-green-200'
+              }
+            `}
           >
             <div className="font-semibold">{loc.location.name}</div>
-            <div className="text-xs text-gray-500">{loc.location.text}</div>
+            <div className="text-xs text-gray-600">{loc.location.text}</div>
 
             <div className="mt-2 space-y-1">
-              {loc.cards.map((card) => (
+              {loc.cards.map(card => (
                 <div
                   key={card.id}
-                  className="text-xs border rounded px-2 py-1 bg-gray-100 transition-all duration-300 ease-out"
+                  className="transition-all duration-300 ease-out"
                 >
-                  {card.name} ({card.basePower})
+                  <PlayerCard card={card} owner={card.owner} selected={false} />
                 </div>
               ))}
             </div>
 
-            <div className="mt-2 text-xs text-gray-600">
-              P1: {calculateLocationPower(state, idx, 1)} | P2:{" "}
-              {calculateLocationPower(state, idx, 2)}
+            {/* Location power totals */}
+            <div className="mt-2 text-xs font-bold">
+              <span className="text-red-600">
+                P1: {calculateLocationPower(state, idx, 1)}
+              </span>{' '}
+              |{' '}
+              <span className="text-blue-600">
+                P2: {calculateLocationPower(state, idx, 2)}
+              </span>
             </div>
           </div>
         ))}
@@ -82,37 +101,34 @@ export default function GameBoard() {
 
       {/* Hand */}
       <div>
-        <div className="font-semibold mb-2">
+        <div className="font-semibold mb-2 text-white">
           Player {state.activePlayer} Hand
         </div>
 
         <div className="flex gap-3">
-          {activeHand.map((card) => {
-            const disabled = card.cost > state.energy[state.activePlayer];
+          {activeHand.map(card => {
+            const disabled = card.cost > state.energy[state.activePlayer]
 
             return (
-              <div
+              <PlayerCard
                 key={card.id}
+                card={card}
+                owner={card.owner}
+                selected={selectedCard?.id === card.id}
+                disabled={disabled}
                 onClick={() => !disabled && setSelectedCard(card)}
-                className={`
-                    w-32 border-2 rounded p-2 text-sm cursor-pointer
-                    ${selectedCard?.id === card.id ? "border-blue-600" : "border-gray-500"}
-                    ${disabled ? "opacity-50 cursor-not-allowed" : ""}
-                    transition-transform duration-200 ease-out hover:scale-105
-                  `}
-              >
-                <div className="font-bold">{card.name}</div>
-                <div>Cost: {card.cost}</div>
-                <div>Power: {card.basePower}</div>
-              </div>
-            );
+              />
+            )
           })}
         </div>
       </div>
 
+      {/* Game Over */}
       {state.gameOver && (
-        <div className="text-center font-bold text-xl">Game Over</div>
+        <div className="text-center font-bold text-xl text-yellow-400">
+          Game Over
+        </div>
       )}
     </div>
-  );
+  )
 }
