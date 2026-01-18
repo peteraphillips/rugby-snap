@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { useReducer, useState } from 'react'
-import { createInitialGameState } from '@/game/initGame'
-import { gameReducer } from '@/game/reducer'
-import { calculateLocationPower } from '@/game/scoring'
-import { Card } from '@/game/types'
+import { useReducer, useState } from "react";
+import { createInitialGameState } from "@/game/initGame";
+import { gameReducer } from "@/game/reducer";
+import { calculateLocationPower } from "@/game/scoring";
+import { Card } from "@/game/types";
 
 export default function GameBoard() {
   const [state, dispatch] = useReducer(
     gameReducer,
     undefined,
-    createInitialGameState
-  )
+    createInitialGameState,
+  );
 
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null)
-  const activeHand = state.hands[state.activePlayer]
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const activeHand = state.hands[state.activePlayer];
 
   return (
     <div className="max-w-5xl mx-auto mt-6 space-y-6">
@@ -31,8 +31,8 @@ export default function GameBoard() {
 
         <button
           onClick={() => {
-            setSelectedCard(null)
-            dispatch({ type: 'END_TURN' })
+            setSelectedCard(null);
+            dispatch({ type: "END_TURN" });
           }}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
@@ -48,26 +48,24 @@ export default function GameBoard() {
             onClick={() => {
               if (selectedCard) {
                 dispatch({
-                  type: 'PLAY_CARD',
+                  type: "PLAY_CARD",
                   cardId: selectedCard.id,
-                  locationIndex: idx
-                })
-                setSelectedCard(null)
+                  locationIndex: idx,
+                });
+                setSelectedCard(null);
               }
             }}
             className={`border-2 rounded p-3 min-h-[160px] cursor-pointer
-              ${selectedCard ? 'border-blue-500' : 'border-gray-700'}`}
+              ${selectedCard ? "border-blue-500" : "border-gray-700"}`}
           >
             <div className="font-semibold">{loc.location.name}</div>
-            <div className="text-xs text-gray-500">
-              {loc.location.text}
-            </div>
+            <div className="text-xs text-gray-500">{loc.location.text}</div>
 
             <div className="mt-2 space-y-1">
-              {loc.cards.map(card => (
+              {loc.cards.map((card) => (
                 <div
                   key={card.id}
-                  className="text-xs border rounded px-2 py-1 bg-gray-100"
+                  className="text-xs border rounded px-2 py-1 bg-gray-100 transition-all duration-300 ease-out"
                 >
                   {card.name} ({card.basePower})
                 </div>
@@ -75,7 +73,7 @@ export default function GameBoard() {
             </div>
 
             <div className="mt-2 text-xs text-gray-600">
-              P1: {calculateLocationPower(state, idx, 1)} | P2:{' '}
+              P1: {calculateLocationPower(state, idx, 1)} | P2:{" "}
               {calculateLocationPower(state, idx, 2)}
             </div>
           </div>
@@ -89,38 +87,32 @@ export default function GameBoard() {
         </div>
 
         <div className="flex gap-3">
-          {activeHand.map(card => {
-            const disabled =
-              card.cost > state.energy[state.activePlayer]
+          {activeHand.map((card) => {
+            const disabled = card.cost > state.energy[state.activePlayer];
 
             return (
               <div
                 key={card.id}
                 onClick={() => !disabled && setSelectedCard(card)}
                 className={`
-                  w-32 border-2 rounded p-2 text-sm cursor-pointer
-                  ${
-                    selectedCard?.id === card.id
-                      ? 'border-blue-600'
-                      : 'border-gray-500'
-                  }
-                  ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-                `}
+                    w-32 border-2 rounded p-2 text-sm cursor-pointer
+                    ${selectedCard?.id === card.id ? "border-blue-600" : "border-gray-500"}
+                    ${disabled ? "opacity-50 cursor-not-allowed" : ""}
+                    transition-transform duration-200 ease-out hover:scale-105
+                  `}
               >
                 <div className="font-bold">{card.name}</div>
                 <div>Cost: {card.cost}</div>
                 <div>Power: {card.basePower}</div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
 
       {state.gameOver && (
-        <div className="text-center font-bold text-xl">
-          Game Over
-        </div>
+        <div className="text-center font-bold text-xl">Game Over</div>
       )}
     </div>
-  )
+  );
 }
